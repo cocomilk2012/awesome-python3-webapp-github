@@ -4,7 +4,11 @@ from datetime import datetime
 from aiohttp import web
 
 def index(request):
-    return web.Response(body=b'<h1>Awesome</h1>')
+    return web.Response(body=b'<h1>Awesome</h1>',content_type='text/html')
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = 'cocomilk'
 
 @asyncio.coroutine
 def init(loop):
