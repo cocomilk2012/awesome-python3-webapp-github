@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+'''
+url handlers
+'''
+
+__author__ = 'cocomilk'
+
+import re,time,json,logging,hashlib,base64,asyncio
+
+from coroweb import get,post
+from models import User,Comment,Blog,next_id
+
+@get('/')
+async def index():
+    users=await User.findAll()
+    return {
+        '__template__':'test.html',
+        'users':users
+    }

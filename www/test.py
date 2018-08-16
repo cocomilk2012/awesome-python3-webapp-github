@@ -4,13 +4,15 @@
 __author__ = 'cocomilk'
 
 
-import orm
+
+import orm,asyncio
 from models import User,Blog,Comment
 
-def test():
-    yield from orm.create_pool(user='cocomilk',password='123123',database='awesome')
+async def test(loop):
+    await orm.create_pool(loop,user='cocomilk',password='123123',db='awesome')
     u=User(name='Test',email='test@example.com',passwd='123456789',image='about:blank')
-    yield from u.save()
+    await u.save()
 
-for x in test():
-    pass
+loop=asyncio.get_event_loop()
+loop.run_until_complete(asyncio.wait([test(loop),]))
+loop.run_forever()

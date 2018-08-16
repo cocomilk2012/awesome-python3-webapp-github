@@ -18,7 +18,7 @@ async  def create_pool(loop,**kwargs):
         user=kwargs['user'],
         password=kwargs['password'],
         db=kwargs['db'],
-        charset=kwargs.get('charset','utf-8'),
+        charset=kwargs.get('charset','utf8'),
         autocommit=kwargs.get('autocommit',True),
         maxsize=kwargs.get('maxsize',10),
         minsize=kwargs.get('minsize',1),
@@ -73,7 +73,7 @@ class Field(object):
 
 class StringField(Field):
     def __init__(self,name=None,primary_key=False,default=None,ddl='varchar(100)'):
-        super().__init__(name,'boolean',False,default)
+        super().__init__(name,'boolean',primary_key,default)
 
 class BooleanField(Field):
     def __init__(self, name=None, default=False):
@@ -109,7 +109,7 @@ class ModelMetaclass(type):
                     fields.append(k)
         if not primaryKey:
             raise BaseException('Primary key not found.')
-        for k in mappings.Keys():
+        for k in mappings.keys():
             attrs.pop(k)
         escaped_fields = list(map(lambda f: '`%s`' % f, fields))
         attrs['__mappings__'] = mappings  # 保存属性和列的映射关系
@@ -203,17 +203,17 @@ class Model(dict, metaclass=ModelMetaclass):
         args.append(self.getValueOrDefault(self.__primary_key__))
         rows = await execute(self.__insert__, args)
         if rows != 1:
-            logging.warn('failed to insert record: affected rows: %s' % rows)
+            logging.WARNING('failed to insert record: affected rows: %s' % rows)
 
     async def updateData(self):
         args = list(map(self.getValue, self.__fields__))
         args.append(self.getValue(self.__primary_key__))
         rows = await execute(self.__update__, args)
         if rows != 1:
-            logging.warn('failed to update by primary key: affected rows: %s' % rows)
+            logging.WARNING('failed to update by primary key: affected rows: %s' % rows)
 
     async def remove(self):
         args = [self.getValue(self.__primary_key__)]
         rows = await execute(self.__delete__, args)
         if rows != 1:
-            logging.warn('failed to remove by primary key: affected rows: %s' % rows)
+            logging.WARNING('failed to remove by primary key: affected rows: %s' % rows)
