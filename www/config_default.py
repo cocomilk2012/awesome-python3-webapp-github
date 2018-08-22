@@ -17,7 +17,7 @@ configs={
         'database':'awesome'
     },
     'session':{
-        'secter':'AwEsOmE'
+        'secret':'AwEsOmE'
     }
 }
 
